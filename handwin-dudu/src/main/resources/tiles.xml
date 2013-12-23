@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="consoleTemplate" template="/WEB-INF/views/consoleLayout.jsp">
+		<put-attribute name="footer" value="/WEB-INF/views/consoleFooter.jsp"/>
+		<put-attribute name="header" value="/WEB-INF/views/consoleHeader.jsp"/>
+	</definition>
+		
+	<!-- 最大的匹配放在最下面 -->
+	<definition name="console:*" extends="consoleTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/console/{1}.jsp"/>
+	</definition>
+</tiles-definitions>

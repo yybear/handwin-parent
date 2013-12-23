@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Project:  any
+  ~ Module:   any-parent
+  ~ File:     profile.xml
+  ~ Modifier: xyang
+  ~ Modified: 2012-09-24 08:16
+  ~
+  ~ Copyright (c) 2012 Sanyuan Ltd. All Rights Reserved.
+  ~
+  ~ Copying of this document or code and giving it to others and the
+  ~ use or communication of the contents thereof, are forbidden without
+  ~ expressed authority. Offenders are liable to the payment of damages.
+  ~ All rights reserved in the event of the grant of a invention patent or the
+  ~ registration of a utility model, design or code.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <beans profile="dev,test">
+        <context:property-placeholder location="classpath:config.properties" ignore-resource-not-found="true"/>
+
+        <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+            <property name="driverClass" value="${db.driver}"/>
+            <property name="jdbcUrl" value="${db.url}"/>
+            <property name="username" value="${db.username}"/>
+            <property name="password" value="${db.password}"/>
+            <property name="idleConnectionTestPeriodInMinutes" value="60"/>
+            <property name="idleMaxAgeInMinutes" value="240"/>
+            <property name="maxConnectionsPerPartition" value="30"/>
+            <property name="minConnectionsPerPartition" value="10"/>
+            <property name="partitionCount" value="3"/>
+            <property name="acquireIncrement" value="5"/>
+            <property name="statementsCacheSize" value="100"/>
+            <property name="releaseHelperThreads" value="3"/>
+        </bean>
+    </beans>
+
+    <beans profile="production">
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath:config.properties,classpath:config-production.properties" />
+        
+        <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+            <property name="jndiName" value="${db.jndi}"/>
+        </bean>
+        
+    </beans>
+
+</beans>
