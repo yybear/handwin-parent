@@ -21,6 +21,7 @@
 		<profile.scope>compile</profile.scope>
 		<project.repository.host>http://192.168.1.182:8081/nexus/content</project.repository.host>
 		<tiles-version>3.0.1</tiles-version>
+		<jackson-version>1.9.12</jackson-version>
 	</properties>
 
 	<distributionManagement>
@@ -289,9 +290,14 @@
 			</dependency>
 			<!-- json -->
 			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>2.2.4</version>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${jackson-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson-version}</version>
 			</dependency>
 			<dependency>
                 <groupId>com.google.guava</groupId>

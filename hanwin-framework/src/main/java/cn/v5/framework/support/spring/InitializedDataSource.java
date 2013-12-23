@@ -1,7 +1,5 @@
 package cn.v5.framework.support.spring;
 
-import java.util.Iterator;
-
 import javax.sql.DataSource;
 
 import org.apache.commons.lang.ArrayUtils;

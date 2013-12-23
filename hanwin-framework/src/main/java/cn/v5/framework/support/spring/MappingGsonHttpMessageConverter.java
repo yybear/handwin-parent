@@ -16,7 +16,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import cn.v5.framework.Constants;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 /** 
  * @author qgan
@@ -37,15 +37,16 @@ public class MappingGsonHttpMessageConverter extends AbstractHttpMessageConverte
 	protected Object readInternal(Class<? extends Object> clazz,
 			HttpInputMessage inputMessage) throws IOException,
 			HttpMessageNotReadableException {
-		Reader br = new BufferedReader(new InputStreamReader(inputMessage.getBody(), "UTF-8"));
+		/*Reader br = new BufferedReader(new InputStreamReader(inputMessage.getBody(), "UTF-8"));
 		Gson gson = new Gson();
-		return gson.fromJson(br, clazz);
+		return gson.fromJson(br, clazz);*/
+		return null;
 	}
 
 	@Override
 	protected void writeInternal(Object t, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
-		Gson gson = new Gson();
+		/*Gson gson = new Gson();
 		String json = gson.toJson(t);
 		
 		Writer writer = new OutputStreamWriter(outputMessage.getBody(), Constants.DEFAULT_CHARSET);
@@ -54,7 +55,7 @@ public class MappingGsonHttpMessageConverter extends AbstractHttpMessageConverte
             writer.flush();
         } finally {
         	writer.close();
-        }
+        }*/
 	}
 
 }

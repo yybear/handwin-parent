@@ -52,7 +52,7 @@ public class AdminController {
 		long start = Long.valueOf(request.getParameter("s") == null? "1": request.getParameter("s"));
 		long limit = 20;
 		
-		Page<Record> feedbacks = dao.paginate(start, limit, "select * ", "from t_feed_back where status=0 and reply_at is not null order by create_at desc");
+		Page<Record> feedbacks = dao.paginate(start, limit, "select * ", "from t_feed_back where status=0 and reply_at is not null order by reply_at desc");
 		return new ModelAndView("console:reply", "page", feedbacks);
 	}
 	
