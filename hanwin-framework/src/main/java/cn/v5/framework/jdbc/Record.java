@@ -285,7 +285,7 @@ public class Record implements Serializable {
 	/**
 	 * Return column names of this record.
 	 */
-	public String[] getcolumnNames() {
+	public String[] columnNames() {
 		Set<String> attrNameSet = columns.keySet();
 		return attrNameSet.toArray(new String[attrNameSet.size()]);
 	}
@@ -293,7 +293,7 @@ public class Record implements Serializable {
 	/**
 	 * Return column values of this record.
 	 */
-	public Object[] getcolumnValues() {
+	public Object[] columnValues() {
 		java.util.Collection<Object> attrValueCollection = columns.values();
 		return attrValueCollection.toArray(new Object[attrValueCollection
 				.size()]);

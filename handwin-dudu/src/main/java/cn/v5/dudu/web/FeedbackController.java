@@ -3,6 +3,10 @@ package cn.v5.dudu.web;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import com.google.common.collect.Maps;
 
 import cn.v5.dudu.util.Constants;
 import cn.v5.dudu.util.Constants.Feedback_Status;
+import cn.v5.framework.ex.CodeException;
 import cn.v5.framework.jdbc.JdbcDao;
 import cn.v5.framework.jdbc.Record;
 import cn.v5.framework.web.Page;
@@ -33,8 +38,14 @@ public class FeedbackController {
 	
 	@RequestMapping(value="/feedback/add", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> add(String account, String content, String code) {
-		// TODO: 判断code, 不正确不保存
+	public Map<String, Object> add(String account, String content, String code, HttpServletRequest request) {
+		// 不正确不保存
+		HttpSession session = request.getSession(false);
+		String cd = (String)session.getAttribute("code");
+		if(StringUtils.isEmpty(cd) || !cd.equalsIgnoreCase(code)) {
+			throw new RuntimeException("验证码错误");
+		}
+			
 		Record record = new Record();
 		record.set("account", account);
 		record.set("content", content);
@@ -51,7 +62,7 @@ public class FeedbackController {
 	@ResponseBody
 	public Map<String, Object> list(@PathVariable("start")int start, @PathVariable("limit")int limit) {
 		
-		Page<Record> feedbacks = dao.paginate(start, limit, "select * ", "from t_feed_back where status=0 and reply_at is null order by create_at desc");
+		Page<Record> feedbacks = dao.paginate(start, limit, "select * ", "from t_feed_back where status=0 order by create_at desc");
 		Map<String, Object> res = Maps.newHashMap();
 		res.put("errno", Constants.SUCCESS);
 		res.put("data", feedbacks);
