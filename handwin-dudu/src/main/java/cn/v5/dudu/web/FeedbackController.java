@@ -58,14 +58,14 @@ public class FeedbackController {
 		return res;
 	}
 	
-	@RequestMapping(value="/feedback/list/{start}/{limit}", method=RequestMethod.GET)
+	@RequestMapping(value="/feedback/list", method=RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> list(@PathVariable("start")int start, @PathVariable("limit")int limit) {
+	public Map<String, Object> list(HttpServletRequest request) {
+		long start = Long.valueOf(request.getParameter("s") == null? "1": request.getParameter("s"));
+		long limit = 20;
 		
 		Page<Record> feedbacks = dao.paginate(start, limit, "select * ", "from t_feed_back where status=0 order by create_at desc");
 		Map<String, Object> res = Maps.newHashMap();
-		res.put("errno", Constants.SUCCESS);
-		res.put("data", feedbacks);
 		return res;
 	}
 }

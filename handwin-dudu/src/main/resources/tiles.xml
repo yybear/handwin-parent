@@ -10,4 +10,13 @@
 	<definition name="console:*" extends="consoleTemplate">
 		<put-attribute name="content" value="/WEB-INF/views/console/{1}.jsp"/>
 	</definition>
+	
+	<definition name="webTemplate" template="/WEB-INF/views/webLayout.jsp">
+		<put-attribute name="footer" value="/WEB-INF/views/webFooter.jsp"/>
+		<put-attribute name="header" value="/WEB-INF/views/webHeader.jsp"/>
+	</definition>
+	
+	<definition name="web:*" extends="webTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/web/{1}.jsp"/>
+	</definition>
 </tiles-definitions>

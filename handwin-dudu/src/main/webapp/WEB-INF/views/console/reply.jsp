@@ -38,6 +38,7 @@
 				     		</c:otherwise>  	
 			            </c:choose>
      					</td>
+     					<td><fmt:formatDate value="${fd.columns.create_at}" type="date"/> </td>
      					<td title="${fd.columns.reply_content}">
 			            <c:choose>
 			            	<c:when test="${fn:length(fd.columns.reply_content) > 20}">   
@@ -48,9 +49,9 @@
 				     		</c:otherwise>  	
 			            </c:choose>
      					</td>
-			            <td><fmt:formatDate value="${fd.columns.create_at}" type="date"/> </td>
 			            <td><fmt:formatDate value="${fd.columns.reply_at}" type="date"/> </td>
 			            <td>
+			            	<a href="javascript:void(0);" class="replyLink" rel="${fd.columns.content}" fc="${fd.columns.reply_content}" fid="${fd.columns.id}">编辑</a>&nbsp;|&nbsp;
 			            	<a class="delFdLink" rel="${fd.columns.id}" href="javascript:void(0);">删除</a>
 			            </td>
 			        </tr>
@@ -60,6 +61,27 @@
 			</table>
 			
 			<%@ include file="../../../pagination.jsp"%>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="replyDiv" tabindex="-1" role="dialog" aria-labelledby="replyDivLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="replyDivLabel">回复用户反馈</h4>
+				</div>
+				<div class="modal-body">
+					<p id="feedback_content"></p>
+					<input type="hidden" id="feedback_id">	
+					<textarea id="replay_content" class="form-control" rows="3"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="saveReply" class="btn btn-primary" data-dismiss="modal">保存</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	
@@ -87,6 +109,27 @@
 
 <script type="text/javascript">
 	var ctx = "${ctx}";
+	
+	$('.replyLink').click(function(e) {
+		var content = $(this).attr("rel");
+		var fid = $(this).attr("fid");
+		var m = $('#replyDiv');
+		var replyContent = $(this).attr("fc");
+		m.on('show.bs.modal', function () {
+			$("#feedback_content").text(content);
+			$("#feedback_id").attr("value", fid);
+			$("#replay_content").val(replyContent);
+        }).modal();
+		e.preventDefault();
+	});
+	
+	$('#saveReply').click(function(e) {
+		var content = $("#replay_content").val();
+		var fid = $("#feedback_id").attr("value");
+		$.post(ctx+"/console/feedback/reply/", {'fid':fid, 'content':content}, function(data) {
+			window.location.reload(true);
+		});
+	});
 	
 	$('.delFdLink').click(function(e) {
 		var fid = $(this).attr("rel");
