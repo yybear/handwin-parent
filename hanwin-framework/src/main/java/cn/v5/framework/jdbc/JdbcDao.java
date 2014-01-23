@@ -165,6 +165,10 @@ public class JdbcDao {
 		return update(tableName, "id", record);
 	}
 	
+	public int update(String sql, Object... args) {
+		return jdbcTemplate.update(sql, args);
+	}
+	
 	public int update(String tableName, String primaryKey, Record record) {
 		StringBuilder sql = new StringBuilder("update `").append(tableName).append("`").append(" set ");
 		

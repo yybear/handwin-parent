@@ -1,23 +1,14 @@
 package cn.v5.framework.jdbc;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Maps;
 
@@ -28,7 +19,7 @@ import com.google.common.collect.Maps;
  * @version 2013年12月17日 上午11:05:40
  */
 @SuppressWarnings("rawtypes")
-public abstract class Model implements Serializable {
+public abstract class Model <M extends Model> implements Serializable {
 
 	private static final long serialVersionUID = -3347963022597705403L;
 
@@ -140,37 +131,17 @@ public abstract class Model implements Serializable {
 		list.add(id);
 		return this.template.update(sql, list.toArray());
 	}
+	
+	protected abstract RowMapper<M> getBeanResultSetCallback();
 
-	public static <M extends Model>  M find(final Class<M> clazz, String sql, Object... params) {
-		BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
-		
-		RowMapper<M> recordCallback = new RowMapper<M>() {
-			
-	        public M mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-	        	Record record = new Record();
-	        	ResultSetMetaData rsmd = rs.getMetaData();
-	        	int columnCount = rsmd.getColumnCount();
-	        	for(int i = 1; i <= columnCount; i++) {
-	        		Object value;
-	        		int type = rsmd.getColumnType(i);
-	        		if(type < Types.BLOB) {
-	        			value = rs.getObject(i);
-	        		} else if(type == Types.CLOB) {
-	        			value = DbHelper.handleClob(rs.getClob(i));
-	        		} else if(type == Types.NCLOB) {
-	        			value = DbHelper.handleClob(rs.getNClob(i));
-	        		} else if(type == Types.BLOB) {
-	        			value = DbHelper.handleBlob(rs.getBlob(i));
-	        		} else 
-	        			value = rs.getObject(i);
-	        		
-	        		record.set(rsmd.getColumnLabel(i), value);
-	        	}
-	            return record;
-	        }
-	    };
-		
-		return this.template.query(sql, params, recordCallback);
+	public List<M> find(String sql, Object... params) {
+		return this.template.query(sql, params, getBeanResultSetCallback());
+	}
+	
+	public M findOne(String sql, Object... params) {
+		List<M> list = find(sql, params);
+		if(CollectionUtils.isEmpty(list))
+			return null;
+		return list.get(0);
 	}
 }
