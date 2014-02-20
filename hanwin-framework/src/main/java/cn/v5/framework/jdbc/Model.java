@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.CollectionUtils;
 
+import cn.v5.framework.ex.NotSupportMethodException;
+
 import com.google.common.collect.Maps;
 
 /**
@@ -19,7 +21,7 @@ import com.google.common.collect.Maps;
  * @version 2013年12月17日 上午11:05:40
  */
 @SuppressWarnings("rawtypes")
-public abstract class Model <M extends Model> implements Serializable {
+public class Model <M extends Model> implements Serializable {
 
 	private static final long serialVersionUID = -3347963022597705403L;
 
@@ -132,7 +134,9 @@ public abstract class Model <M extends Model> implements Serializable {
 		return this.template.update(sql, list.toArray());
 	}
 	
-	protected abstract RowMapper<M> getBeanResultSetCallback();
+	protected RowMapper<M> getBeanResultSetCallback() {
+		throw new NotSupportMethodException("not support");
+	}
 
 	public List<M> find(String sql, Object... params) {
 		return this.template.query(sql, params, getBeanResultSetCallback());
