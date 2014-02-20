@@ -9,4 +9,7 @@ import java.nio.charset.Charset;
 public class Constants {
 	public static final String DEFAULT_CHARSET = "UTF-8";
     public static final Charset CHARSET = Charset.forName(DEFAULT_CHARSET);
+    
+    public static final String CLIENT_SESSION = "client-session";
+    public static final String USER_SESSION = "USER_SESSION_";
 }
