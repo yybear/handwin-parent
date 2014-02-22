@@ -1,4 +1,4 @@
-package cn.v5.ex.web;
+package cn.v5.ex;
 
 import cn.v5.framework.ex.ExceptionUtils;
 

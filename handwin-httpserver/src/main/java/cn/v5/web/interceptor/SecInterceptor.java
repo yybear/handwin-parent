@@ -1,4 +1,4 @@
-package cn.v5.web;
+package cn.v5.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import cn.v5.ex.web.UnauthorizedException;
+import cn.v5.ex.UnauthorizedException;
 import cn.v5.framework.Constants;
 import cn.v5.framework.support.spring.ConfigurableInterceptor;
 

@@ -21,8 +21,8 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<!-- redis template definition -->
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" 
+	<!-- user redis template definition -->
+	<bean id="userRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate" 
 		p:connection-factory-ref="jedisConnFactory">
 	</bean>
 	
@@ -32,4 +32,19 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames"
+			value="classpath:message/errors,classpath:messages,classpath:messages_card,classpath:messages_promotion" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	<bean class="cn.v5.framework.message.NLS">
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+	</bean>
+	<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+ 		<property name="validator" ref="validator"/>
+ 	</bean>
 </beans>

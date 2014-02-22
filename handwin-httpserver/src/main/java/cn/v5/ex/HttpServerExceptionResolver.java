@@ -1,4 +1,4 @@
-package cn.v5.web;
+package cn.v5.ex;
 
 import java.util.Map;
 
@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
-
-import cn.v5.ex.web.HttpServerException;
-import cn.v5.ex.web.UnauthorizedException;
 
 import com.google.common.collect.Maps;
 
@@ -20,10 +19,14 @@ import com.google.common.collect.Maps;
  * @version 2014年2月20日 下午4:28:23
  */
 public class HttpServerExceptionResolver extends SimpleMappingExceptionResolver {
+	private static final Logger log = LoggerFactory.getLogger(HttpServerExceptionResolver.class);
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
+		log.warn(ex.getMessage(), ex);
+		
 		MappingJacksonJsonView view = new MappingJacksonJsonView();
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -49,7 +52,7 @@ public class HttpServerExceptionResolver extends SimpleMappingExceptionResolver 
 			modelAndView.setView(view);
 		} else {
 			response.setStatus(500);
-	        
+			// TODO: 添加消息体
 		}
 		return modelAndView;
 	}

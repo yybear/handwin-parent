@@ -50,6 +50,10 @@
         		</bean>
         	</property>
         </bean>
+        
+        <bean id="couchbaseConfig" class="cn.v5.couchbase.CouchbaseConfig">
+        	<property name="bootstrapHosts" value="${couchbase.host}"></property>
+        </bean>
     </beans>
 
     <beans profile="production">
@@ -59,6 +63,21 @@
             <property name="jndiName" value="${db.jndi}"/>
         </bean>
         
+        <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:use-pool="true">
+        	<property name="hostName" value="${redis.host}"/>
+        	<property name="port" value="${redis.port}"/>
+        	<property name="poolConfig">
+        		<bean class="redis.clients.jedis.JedisPoolConfig">
+        			<property name="minIdle" value="5"></property>
+        			<property name="testOnBorrow" value="true"></property>
+        			<property name="maxActive" value="10"></property>
+        			<property name="maxWait" value="1000"></property>
+        		</bean>
+        	</property>
+        </bean>
+        
+        <bean id="couchbaseConfig" class="cn.v5.couchbase.CouchbaseConfig">
+        	<property name="bootstrapHosts" value=""></property>
+        </bean>
     </beans>
-
 </beans>

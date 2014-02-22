@@ -1,4 +1,4 @@
-package cn.v5.ex.web;
+package cn.v5.ex;
 /** 
  * @author qgan
  * @version 2014年2月20日 下午2:16:19
